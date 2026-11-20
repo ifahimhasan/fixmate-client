@@ -18,7 +18,8 @@ export function Modal({
   return (
     <Dialog open={open} onClose={onClose} className="relative z-[100]">
       <div className="fixed inset-0 bg-[#0e1330]/45 backdrop-blur-sm" aria-hidden="true" />
-      <div className="fixed inset-0 flex items-center justify-center overflow-y-auto p-4">
+      <div className="fixed inset-0 overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4">
         <DialogPanel className={`glass w-full ${size === "lg" ? "max-w-[640px]" : "max-w-[460px]"} rounded-[29px] p-2.5`}>
           <div className="rounded-[21px] bg-surface p-6 sm:p-7">
             <div className="mb-4 flex items-start justify-between gap-4">
@@ -30,6 +31,7 @@ export function Modal({
             {children}
           </div>
         </DialogPanel>
+        </div>
       </div>
     </Dialog>
   );
