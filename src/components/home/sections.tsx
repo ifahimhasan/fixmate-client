@@ -7,6 +7,7 @@ import EmptyState from "@/components/ui/empty-state";
 import { CATEGORIES, CATEGORY_STYLE } from "@/lib/constants";
 import type { Service } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { Avatar } from "@/components/layout/navbar";
 
 function Heading({ eyebrow, title, text }: { eyebrow: string; title: string; text?: string }) {
   return (
@@ -145,7 +146,7 @@ export function WhyChoose() {
           <div className="mt-auto flex flex-col gap-2">
             {techs.map((t) => (
               <div key={t.n} className="flex items-center gap-2.5 rounded-[14px] border border-line bg-surface px-3 py-2.5">
-                <span className={cn("grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full text-xs font-bold", t.c)}>{t.i}</span>
+                <Avatar name={t.n} size={34} />
                 <span className="flex min-w-0 flex-1 flex-col leading-tight"><span className="text-sm font-bold">{t.n}</span><span className="text-xs text-muted">{t.s}</span></span>
                 <span className="rounded-full bg-mint-soft px-2 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">Approved</span>
               </div>
@@ -232,7 +233,7 @@ export function Testimonials() {
               <span className="flex text-amber-400" aria-label="5 out of 5 stars">{Array.from({ length: 5 }).map((_, k) => <Star key={k} className="h-4 w-4 fill-current" />)}</span>
               <blockquote className="min-h-[78px] text-base leading-[1.618]">{q.text}</blockquote>
               <figcaption className="flex items-center gap-3 border-t border-line pt-3">
-                <span className={cn("grid h-[42px] w-[42px] place-items-center rounded-full text-sm font-bold", q.c)}>{q.i}</span>
+                <Avatar name={q.name} size={42} />
                 <span className="flex flex-col leading-snug"><span className="text-[15px] font-bold">{q.name}</span><span className="text-[13px] text-muted">{q.job}</span></span>
               </figcaption>
             </figure>

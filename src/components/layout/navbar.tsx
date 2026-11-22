@@ -12,6 +12,7 @@ import { signOut, useSession } from "@/lib/auth-client";
 import { clearToken } from "@/lib/api";
 import { DASHBOARD_HOME, type Role } from "@/lib/constants";
 import { cn, initials } from "@/lib/utils";
+import { PEOPLE } from "@/lib/images";
 
 const LINKS = [
   { href: "/", label: "Home" },
@@ -20,8 +21,9 @@ const LINKS = [
 ];
 
 export function Avatar({ name, image, size = 38 }: { name: string; image?: string | null; size?: number }) {
-  return image ? (
-    <Image src={image} alt={name} width={size} height={size} className="rounded-full object-cover" style={{ width: size, height: size }} />
+  const src = image || PEOPLE[name];
+  return src ? (
+    <Image src={src} alt={name} width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />
   ) : (
     <span className="grid place-items-center rounded-full bg-brand-soft text-[13px] font-bold text-brand" style={{ width: size, height: size }}>
       {initials(name)}

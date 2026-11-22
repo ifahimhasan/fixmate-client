@@ -33,4 +33,19 @@ export const UNSPLASH_IDS = {
   "Washing Machine": ["1626806787461-102c1bfaaea1", "1604335399105-a0c585fd81a1"],
   Electrical: ["1621905251189-08b45d6a269e", "1758101755915-462eddc23f57"],
 };
+/** Profile photos of the demo people (seed users, reviews, testimonials). */
+const face = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&crop=faces&w=240&h=240&q=80`;
+export const PEOPLE: Record<string, string> = {
+  "FixMate Admin": face("1759755487703-91f22c31bfbd"),
+  "Tanvir Alam": face("1653055645127-54ec96add7b5"),
+  "Mehedi Hasan": face("1762708547805-472836585b39"),
+  "Sumaiya Akter": face("1759840278361-f1adc75529a1"),
+  "Arif Chowdhury": face("1774437676976-655ad890b6ff"),
+  "Nabila Rahman": face("1706943262459-3ef6ce03305c"),
+  "Sajid Karim": face("1667552094726-6d4f0c80d836"),
+  "Farzana Islam": face("1775486101687-1950422dbca7"),
+  "Rakib Hossain": face("1667552094893-1937abd3d8c9"),
+  "Mitu Das": face("1771507213365-c6047b40e2e1"),
+};
+
 export { unsplash };

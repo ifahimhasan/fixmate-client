@@ -5,6 +5,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowRight, Check, Lock, Search, Smartphone } from "lucide-react";
 import { CATEGORIES } from "@/lib/constants";
+import { PEOPLE } from "@/lib/images";
+import Image from "next/image";
 
 gsap.registerPlugin(useGSAP);
 
@@ -159,8 +161,8 @@ export default function Hero() {
             </div>
             <aside className="flex min-w-0 flex-col gap-[18px] border-line bg-gradient-to-b from-violet-50 to-sky-50 p-[26px] text-left max-lg:border-t lg:border-l dark:from-[#1d2136] dark:to-[#1a2236]">
               <div className="flex items-center gap-3">
-                <span className="relative grid h-[52px] w-[52px] place-items-center rounded-full bg-[#0e1330] font-bold text-white">
-                  TA
+                <span className="relative h-[52px] w-[52px] shrink-0">
+                  <Image src={PEOPLE["Tanvir Alam"]} alt="Tanvir Alam" width={52} height={52} className="h-[52px] w-[52px] rounded-full object-cover" />
                   <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full border-2 border-white bg-mint">
                     <Check className="h-2.5 w-2.5 text-white" strokeWidth={4} />
                   </span>

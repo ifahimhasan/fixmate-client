@@ -8,6 +8,7 @@
  */
 import { MongoClient, ObjectId } from "mongodb";
 import { hashPassword } from "better-auth/crypto";
+import { PEOPLE } from "../src/lib/images";
 
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.DB_NAME || "fixmate";
@@ -82,7 +83,7 @@ async function main() {
   for (const [i, u] of USERS.entries()) {
     const _id = new ObjectId();
     const createdAt = ago(60 - i * 5);
-    await users.insertOne({ _id, name: u.name, email: u.email, emailVerified: true, image: null, role: u.role, phone: u.phone, area: u.area, bio: u.bio, createdAt, updatedAt: createdAt });
+    await users.insertOne({ _id, name: u.name, email: u.email, emailVerified: true, image: PEOPLE[u.name] ?? null, role: u.role, phone: u.phone, area: u.area, bio: u.bio, createdAt, updatedAt: createdAt });
     await accounts.insertOne({ _id: new ObjectId(), accountId: _id.toHexString(), providerId: "credential", userId: _id, password: await hashPassword(u.password), createdAt, updatedAt: createdAt });
     byEmail[u.email] = { ...u, _id };
   }

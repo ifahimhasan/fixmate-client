@@ -3,7 +3,8 @@ import Image from "next/image";
 import { MapPin, Star } from "lucide-react";
 import type { Service } from "@/lib/types";
 import { IMAGES } from "@/lib/images";
-import { initials, money } from "@/lib/utils";
+import { money } from "@/lib/utils";
+import { Avatar } from "@/components/layout/navbar";
 
 export default function ServiceCard({ service }: { service: Service }) {
   const img = service.image || IMAGES.category[service.category] || IMAGES.serviceFallback;
@@ -30,7 +31,7 @@ export default function ServiceCard({ service }: { service: Service }) {
             {service.serviceArea}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="grid h-5 w-5 place-items-center rounded-full bg-brand-soft text-[9px] font-bold text-brand">{initials(service.technicianName)}</span>
+            <Avatar name={service.technicianName} size={22} />
             <span className="font-bold text-ink">{service.technicianName}</span>
             {service.reviewCount ? (
               <span className="ml-auto flex items-center gap-1">
