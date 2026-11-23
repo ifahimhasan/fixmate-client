@@ -1,83 +1,159 @@
-# FixMate - Smart Device & Home Appliance Repair Service Platform
+# FixMate - Smart Device & Home Appliance Repair Platform
 
-FixMate connects customers with **verified technicians** for phone, laptop, AC, refrigerator, TV,
-washing machine and electrical repairs. Every job has a **trackable status**, and the customer
-**pays only after the job is completed** (Stripe test mode).
+FixMate connects customers with **verified technicians** for smartphone, laptop, AC, refrigerator, TV,
+washing machine and electrical repairs. A customer sends a repair request, follows the job on a live
+status timeline, and **pays online only after the job is completed**.
 
-- **Live site:** `https://<your-client>.vercel.app`
-- **Server repo / API:** `https://<your-server>.vercel.app` (see the server README)
+| | |
+|---|---|
+| **Live site** | https://fixmate-client-xi.vercel.app |
+| **Live API** | https://fixmate-server-rho.vercel.app |
+| **Server repo** | https://github.com/ifahimhasan/fixmate-server |
 
-## Demo accounts (created by `npm run seed`)
+---
+
+## Demo accounts
+
 | Role | Email | Password |
 |---|---|---|
-| Admin | `admin@fixmate.com` | `Admin@123` |
+| **Admin** | `admin@fixmate.com` | `Admin@123` |
 | Technician | `tanvir@fixmate.com` | `Tech@123` |
-| Technician | `mehedi@fixmate.com` / `sumaiya@fixmate.com` / `arif@fixmate.com` | `Tech@123` |
+| Technician | `mehedi@fixmate.com`, `sumaiya@fixmate.com`, `arif@fixmate.com` | `Tech@123` |
 | Customer | `nabila@fixmate.com` | `Customer@123` |
-| Customer | `sajid@fixmate.com` / `farzana@fixmate.com` | `Customer@123` |
+| Customer | `sajid@fixmate.com`, `farzana@fixmate.com` | `Customer@123` |
 
-Stripe test card: `4242 4242 4242 4242`, any future date, any CVC.
+**Stripe test card:** `4242 4242 4242 4242` · any future date · any CVC · any ZIP
+
+The demo data includes approved services from every technician and bookings in every status
+(requested, accepted, in progress, completed, paid, cancelled, rejected), so each flow can be checked right away.
+
+---
+
+## How it works
+
+1. **Sign up** as a Customer or Technician (Admin is created only by the seed script).
+2. **Technician** adds a repair service with an image (ImgBB). It stays **pending** until an admin approves it.
+3. **Admin** approves or rejects the service. Only approved and available services appear publicly.
+4. **Customer** opens a service and sends a repair request with a preferred date, address and problem details.
+5. **Technician** accepts the job, starts work and marks it completed with the final amount.
+6. **Customer** pays through Stripe Checkout, downloads a PDF invoice and leaves a rating & review.
+
+---
 
 ## Key features
-- **Role-based platform** - Customer, Technician and Admin, each with its own dashboard and sidebar.
-- **BetterAuth + MongoDB adapter** - email/password sign up with role selection (admin can never be chosen),
-  live password rules, optional Google login, `role / phone / area / bio` as additional user fields.
-- **JWT for the API** - `/api/token` turns the BetterAuth session into a JWT; the Express API protects every
-  private route with `verifyToken`, `verifyCustomer`, `verifyTechnician`, `verifyAdmin` (401 / 403).
-- **Browse services** - server-side search, category & mode filters, price/newest sort and pagination;
-  filters live in the URL, so they survive reloads and `/services?category=AC` opens pre-filtered.
-- **Repair requests** - validated request form (today-or-later date, 20+ character problem), duplicate active
-  requests blocked, technicians/admins can't request.
-- **Job status pipeline** - Requested → Accepted → In Progress → Completed (final amount) or Rejected / Cancelled,
-  enforced on the server; visual **job timeline tracker** from `statusHistory`.
-- **Pay after service** - Stripe Checkout for completed + unpaid jobs only, success-page verification **and**
-  webhook, never saved twice; **PDF invoice** download.
-- **Rating & review** after payment, average rating on service cards and details.
-- **Technician tools** - add services with ImgBB image upload, full CRUD, availability toggle, manage requests.
-- **Admin tools** - approve/reject services, change user roles (not their own), all bookings, transactions + revenue.
-- **Dashboards with charts** (Recharts), reusable stats cards, consistent status badge colours.
-- **Polish** - Circuit Bloom design (Monda font, glassmorphism, golden-ratio spacing), GSAP + ScrollTrigger
-  animations, marquee, dark/light mode, skeleton loaders, empty states, confirmation modals, toasts,
-  custom 404 + error page, fully responsive.
+
+**Authentication & roles**
+- BetterAuth with the MongoDB adapter, email & password login, optional Google login
+- Role selection on sign up (Customer / Technician); admin can never be chosen, checked on the server too
+- Live password rules (6+ characters, one uppercase, one lowercase) shown under the field
+- `role`, `phone`, `area`, `bio` stored as BetterAuth additional fields
+- Protected dashboards: logged-out users go to Sign In and come back after login, wrong role goes to its own dashboard
+- No logout on page reload of any private route
+
+**Customer**
+- Browse services with **server-side** search, category & mode filters, sort and pagination
+- Filters stay in the URL, so they survive a reload and `/services?category=AC` opens pre-filtered
+- Repair request form with validation and duplicate-request protection
+- My bookings with a visual **job timeline tracker** (Requested → Accepted → In Progress → Completed → Paid)
+- Cancel a pending request, pay after completion, download a **PDF invoice**, payment history
+- **Rating & review** after payment, average rating shown on cards and details
+
+**Technician**
+- Add, edit and delete services with ImgBB image upload (edits go back to pending)
+- Availability toggle
+- Manage requests: accept, reject, start work, mark completed with the final amount
+- Overview with earnings and job charts
+
+**Admin**
+- Approve or reject services, pending shown first
+- Manage users and change roles (never their own)
+- All bookings with a status filter, all transactions and revenue charts
+
+**UI & experience**
+- Modern responsive design with the Monda font, glassmorphism cards and golden-ratio spacing
+- GSAP + ScrollTrigger animations, marquee, dark / light mode
+- Toasts for every action, confirmation modals, skeleton loaders, empty states
+- Custom 404 and error pages
+
+---
 
 ## Pages
-`/`, `/services`, `/services/[id]`, `/about`, `/sign-up`, `/sign-in`, `/payment/success`, `/payment/cancel`,
-`/dashboard/customer` (+ `/bookings`, `/payments`), `/dashboard/technician` (+ `/add-service`, `/my-services`, `/requests`),
-`/dashboard/admin` (+ `/users`, `/services`, `/bookings`, `/transactions`), `/dashboard/profile`, 404.
+
+| Area | Routes |
+|---|---|
+| Public | `/`, `/services`, `/services/[id]`, `/about` |
+| Auth | `/sign-in`, `/sign-up` |
+| Payment | `/payment/success`, `/payment/cancel` |
+| Customer | `/dashboard/customer`, `/dashboard/customer/bookings`, `/dashboard/customer/payments` |
+| Technician | `/dashboard/technician`, `/dashboard/technician/add-service`, `/dashboard/technician/my-services`, `/dashboard/technician/requests` |
+| Admin | `/dashboard/admin`, `/dashboard/admin/users`, `/dashboard/admin/services`, `/dashboard/admin/bookings`, `/dashboard/admin/transactions` |
+| Shared | `/dashboard/profile` |
+
+---
+
+## Tech stack
+
+| Area | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router, Turbopack), React 19, TypeScript |
+| Styling | Tailwind CSS v4, Headless UI |
+| Auth | BetterAuth + MongoDB adapter, JWT for the Express API |
+| Backend | Express 5 API (separate repo), MongoDB |
+| Payments & media | Stripe Checkout (test mode), ImgBB |
+| Hosting | Vercel |
 
 ## npm packages
+
 | Package | Used for |
 |---|---|
-| `next`, `react`, `react-dom` | Next.js 16 App Router |
-| `tailwindcss`, `@tailwindcss/turbopack` | Styling (Tailwind v4) |
+| `next`, `react`, `react-dom` | Next.js App Router |
+| `tailwindcss`, `@tailwindcss/turbopack` | Styling |
 | `better-auth`, `mongodb` | Authentication with the MongoDB adapter |
-| `jsonwebtoken` | Signing the API JWT in `/api/token` |
-| `@headlessui/react` | Accessible modals, menus, FAQ disclosure |
+| `jsonwebtoken` | Signing the API token in `/api/token` |
+| `@headlessui/react` | Modals, menus and FAQ |
 | `sonner` | Toast notifications |
 | `recharts` | Dashboard charts |
-| `gsap`, `@gsap/react` | Animations and ScrollTrigger reveals |
+| `gsap`, `@gsap/react` | Animations and scroll reveals |
 | `lucide-react` | Icons |
 | `next-themes` | Dark / light mode |
 | `jspdf` | PDF invoices |
-| `clsx` | Class names |
-| `@fontsource-variable/monda` | Monda font (self-hosted) |
+| `clsx` | Conditional class names |
+| `@fontsource-variable/monda` | Monda font |
+| `server-only` | Keeping server code out of the browser |
 | `tsx` (dev) | Running the seed script |
 
-## Images
-All static images are in `src/lib/images.ts` (Unsplash photos, free under the Unsplash License).
-To use your own: put the file in `public/images/` and change the URL to `/images/<file>.jpg`.
-Service images come from technicians' ImgBB uploads.
+---
+
+## Environment variables
+
+Create `.env.local` from `.env.example`:
+
+| Variable | Description |
+|---|---|
+| `BETTER_AUTH_SECRET` | Random secret for BetterAuth |
+| `BETTER_AUTH_URL` | Client URL (`http://localhost:3000` locally) |
+| `NEXT_PUBLIC_APP_URL` | Client URL |
+| `MONGODB_URI` | MongoDB connection string (same as the server) |
+| `DB_NAME` | Database name (`fixmate`) |
+| `JWT_SECRET` | Must be the same as the server's `JWT_SECRET` |
+| `NEXT_PUBLIC_API_URL` | Server URL (`http://localhost:5000` locally) |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Optional, for Google login |
 
 ## Run locally
+
 ```bash
-cp .env.example .env.local   # fill in the values (JWT_SECRET must match the server)
+git clone https://github.com/ifahimhasan/fixmate-client.git
+cd fixmate-client
 npm install
-npm run seed                 # optional demo data
+cp .env.example .env.local   # fill in the values
+npm run seed                 # demo users, services, bookings and payments
 npm run dev                  # http://localhost:3000
 ```
 
-## Deploy (Vercel)
-1. Import the repo in Vercel (framework: Next.js) and add every variable from `.env.example`.
-2. Set `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` to the production URL (they are BetterAuth trusted origins).
-3. Set `NEXT_PUBLIC_API_URL` to the deployed server URL, and add this client URL to the server's `CLIENT_URLS` / `CLIENT_URL`.
-4. Optional Google login: add `https://<client>/api/auth/callback/google` as a redirect URI in Google Cloud.
+The server must be running too (see the server repo).
+
+## Images
+
+All site images live in `src/lib/images.ts` (free Unsplash photos). To use your own, put the file in
+`public/images/` and change the URL to `/images/<file-name>.jpg`. Service images come from the
+technicians' ImgBB uploads.
